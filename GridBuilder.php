@@ -34,7 +34,7 @@ class GridBuilder extends \DC_Table
 
         // grid classes
         for ($i=1;$i<=$columns;$i++) {
-            $this->prepareDefinition('grid_' . $i, array
+            $this->prepareDefinition('.grid_' . $i, array
             (
                 'display:inline;',
                 'float:left;',
@@ -47,7 +47,7 @@ class GridBuilder extends \DC_Table
 
         // push classes
         for ($i=1;$i<$columns;$i++) {
-            $this->prepareDefinition('push_' . $i, array
+            $this->prepareDefinition('.push_' . $i, array
             (
                 'position:relative;',
                 'left:' . $this->calculatePushWidth($i) . 'px;'
@@ -56,7 +56,7 @@ class GridBuilder extends \DC_Table
 
         // pull classes
         for ($i=1;$i<$columns;$i++) {
-            $this->prepareDefinition('pull_' . $i, array
+            $this->prepareDefinition('.pull_' . $i, array
             (
                 'position:relative;',
                 'left:' . $this->calculatePullWidth($i) . 'px;'
@@ -102,7 +102,7 @@ class GridBuilder extends \DC_Table
         // reverse order so the sorting is correct
         foreach (array_reverse($this->preparedDefinitions, true) as $selector => $definition) {
             $dc->getNewPosition('new', \Input::get('id'), true);
-            $dc->set['selector']                    = '.' . $selector;
+            $dc->set['selector']                    = $selector;
             $dc->set['own']                         = $definition;
             $dc->set['is_grid_builder_definition']  = 1;
             \Database::getInstance()->prepare('INSERT INTO tl_style %s')
