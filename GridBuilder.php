@@ -102,7 +102,7 @@ class GridBuilder extends \DC_Table
         // reverse order so the sorting is correct
         foreach (array_reverse($this->preparedDefinitions, true) as $selector => $definition) {
             $dc->getNewPosition('new', \Input::get('id'), true);
-            $dc->set['selector']                    = $selector;
+            $dc->set['selector']                    = '.' . $selector;
             $dc->set['own']                         = $definition;
             $dc->set['is_grid_builder_definition']  = 1;
             \Database::getInstance()->prepare('INSERT INTO tl_style %s')
