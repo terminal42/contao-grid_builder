@@ -33,8 +33,15 @@ class GridBuilder extends \DC_Table
     private $gutterWidth = 0;
     private $columnWidth = 0;
 
+    /**
+     * Public constructor without any params to prevent calling the parent that needs a table
+     */
     public function __construct() {}
 
+    /**
+     * Checks if the grid has to be built for the given stylesheet
+     * @param   \DataContainer
+     */
     public function checkBuildGrid(\DataContainer $dc)
     {
         if (($styleSheetModel = \StyleSheetModel::findByPk($dc->intId)) !== null) {
@@ -44,6 +51,11 @@ class GridBuilder extends \DC_Table
         }
     }
 
+    /**
+     * Builds the grid definitions
+     * @param   \StyleSheetModel
+     * @param   \DataContainer
+     */
     private function buildGrid($styleSheetModel, $dc)
     {
         $this->gutterWidth = (int) $styleSheetModel->grid_builder_gutter;
@@ -104,7 +116,7 @@ class GridBuilder extends \DC_Table
     }
 
     /**
-     * Calculate with of offset class
+     * Calculate with of push class
      * @param   int
      * @return  int
      */
@@ -113,11 +125,21 @@ class GridBuilder extends \DC_Table
         return ($i * $this->columnWidth) + ($i * $this->gutterWidth);
     }
 
+    /**
+     * Calculate with of pull class
+     * @param   int
+     * @return  int
+     */
     private function calculatePullWidth($i)
     {
         return -$this->calculatePushWidth($i);
     }
 
+    /**
+     * Prepares the definitions array
+     * @param   string
+     * @param   array
+     */
     private function prepareDefinition($selector, $data)
     {
         $set = '';
@@ -127,12 +149,20 @@ class GridBuilder extends \DC_Table
         $this->preparedDefinitions[$selector] = $set;
     }
 
+    /**
+     * Cleans up old the existing definitions so new ones can be created
+     * @param   \StyleSheetModel
+     */
     private function cleanUpExistingDefinitions($styleSheetModel)
     {
         \Database::getInstance()->prepare('DELETE FROM tl_style WHERE pid=? AND is_grid_builder_definition=?')
             ->execute($styleSheetModel->id, 1);
     }
 
+    /**
+     * Writes the definitions to the database
+     * @param   \DataContainer
+     */
     private function writeDefinitions($dc)
     {
         // reverse order so the sorting is correct
