@@ -44,24 +44,21 @@ class GridBuilder extends \DC_Table
      */
     public function checkBuildGrid(\DataContainer $dc)
     {
-        if (($styleSheetModel = \StyleSheetModel::findByPk($dc->intId)) !== null) {
-            if ($styleSheetModel->grid_builder_enable) {
-                $this->buildGrid($styleSheetModel, $dc);
-            }
+        if ($dc->activeRecord->grid_builder_enable) {
+            $this->buildGrid($dc);
         }
     }
 
     /**
      * Builds the grid definitions
-     * @param   \StyleSheetModel
      * @param   \DataContainer
      */
-    private function buildGrid($styleSheetModel, $dc)
+    private function buildGrid($dc)
     {
-        $this->gutterWidth = (int) $styleSheetModel->grid_builder_gutter;
+        $this->gutterWidth = (int) $dc->activeRecord->grid_builder_gutter;
         $margin =  $this->gutterWidth / 2;
-        $columns = (int) $styleSheetModel->grid_builder_columns;
-        $totalWidth = (int) $styleSheetModel->grid_builder_width;
+        $columns = (int) $dc->activeRecord->grid_builder_columns;
+        $totalWidth = (int) $dc->activeRecord->grid_builder_width;
         $this->columnWidth = (int) (($totalWidth / $columns) - $this->gutterWidth);
 
         // min-width on body
@@ -101,7 +98,7 @@ class GridBuilder extends \DC_Table
             ));
         }
 
-        $this->cleanUpExistingDefinitions($styleSheetModel);
+        $this->cleanUpExistingDefinitions($dc);
         $this->writeDefinitions($dc);
     }
 
@@ -151,12 +148,12 @@ class GridBuilder extends \DC_Table
 
     /**
      * Cleans up old the existing definitions so new ones can be created
-     * @param   \StyleSheetModel
+     * @param   \DataContainer
      */
-    private function cleanUpExistingDefinitions($styleSheetModel)
+    private function cleanUpExistingDefinitions($dc)
     {
         \Database::getInstance()->prepare('DELETE FROM tl_style WHERE pid=? AND is_grid_builder_definition=?')
-            ->execute($styleSheetModel->id, 1);
+            ->execute($dc->activeRecord->id, 1);
     }
 
     /**

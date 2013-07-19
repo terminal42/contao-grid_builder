@@ -26,6 +26,10 @@
  * @license    http://opensource.org/licenses/lgpl-3.0.html
  */
 
+/**
+ * Config
+ */
+$GLOBALS['TL_DCA']['tl_style_sheet']['config']['onsubmit_callback'][] = array('GridBuilder', 'checkBuildGrid');
 
 /**
  * Palettes
