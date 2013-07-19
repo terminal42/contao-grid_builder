@@ -59,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_style_sheet']['fields']['grid_builder_width'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_style_sheet']['grid_builder_width'],
     'inputType'               => 'text',
     'default'                 => 960,
-    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true),
+    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true, 'isGridBuilderField'=>true),
     'sql'                     => "smallint(5) NOT NULL default '0'"
 );
 
@@ -68,7 +68,7 @@ $GLOBALS['TL_DCA']['tl_style_sheet']['fields']['grid_builder_columns'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_style_sheet']['grid_builder_columns'],
     'inputType'               => 'text',
     'default'                 => 12,
-    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true),
+    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true, 'isGridBuilderField'=>true),
     'sql'                     => "smallint(2) NOT NULL default '0'"
 );
 
@@ -77,6 +77,11 @@ $GLOBALS['TL_DCA']['tl_style_sheet']['fields']['grid_builder_gutter'] = array
     'label'                   => &$GLOBALS['TL_LANG']['tl_style_sheet']['grid_builder_gutter'],
     'inputType'               => 'text',
     'default'                 => 20,
-    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true),
+    'eval'                    => array('rgxp'=>'digit', 'tl_class'=>'w50', 'mandatory'=>true, 'isGridBuilderField'=>true),
     'sql'                     => "smallint(3) NOT NULL default '0'"
+);
+
+$GLOBALS['TL_DCA']['tl_style_sheet']['fields']['grid_builder_hash'] = array
+(
+    'sql'                     => "varchar(32) NOT NULL default ''"
 );

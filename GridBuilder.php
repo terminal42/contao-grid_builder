@@ -44,9 +44,41 @@ class GridBuilder extends \DC_Table
      */
     public function checkBuildGrid(\DataContainer $dc)
     {
-        if ($dc->activeRecord->grid_builder_enable) {
+        if ($dc->activeRecord->grid_builder_enable && $this->settingsChanged($dc)) {
+
             $this->buildGrid($dc);
         }
+    }
+
+    /**
+     * Checks whether the settings have changed to prevent useless generation of definitions
+     * @param   \DataContainer
+     * @return  boolean
+     */
+    private function settingsChanged($dc)
+    {
+        $fields = array_filter($GLOBALS['TL_DCA']['tl_style_sheet']['fields'], function($field) {
+            return $field['eval']['isGridBuilderField'];
+        });
+
+        // sort fields
+        ksort($fields);
+
+        $key = '';
+        foreach (array_keys($fields) as $field) {
+            $key .= $dc->activeRecord->{$field};
+        }
+
+        $hash = md5($key);
+
+        if ($hash == $dc->activeRecord->grid_builder_hash) {
+            return false;
+        }
+
+        \Database::getInstance()->prepare('UPDATE tl_style_sheet SET grid_builder_hash=? WHERE id=?')
+            ->execute($hash, $dc->activeRecord->id);
+
+        return true;
     }
 
     /**
